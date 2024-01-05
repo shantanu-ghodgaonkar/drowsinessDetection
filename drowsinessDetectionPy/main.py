@@ -1,16 +1,25 @@
-# This is a sample Python script.
+# importing libraries
+import cv2
+import numpy as np
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+image = cv2.imread("pic23-200x141.png")
+
+cv2.imshow('Original Image', image)
+cv2.waitKey(0)
+
+# Gaussian Blur
+Gaussian = cv2.GaussianBlur(image, (7, 7), 0)
+cv2.imshow('Gaussian Blurring', Gaussian)
+cv2.waitKey(0)
+
+# Median Blur
+median = cv2.medianBlur(image, 5)
+cv2.imshow('Median Blurring', median)
+cv2.waitKey(0)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+# Bilateral Blur
+bilateral = cv2.bilateralFilter(image, 9, 75, 75)
+cv2.imshow('Bilateral Blurring', bilateral)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
