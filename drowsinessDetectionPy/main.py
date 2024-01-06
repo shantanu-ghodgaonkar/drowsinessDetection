@@ -23,3 +23,9 @@ bilateral = cv2.bilateralFilter(image, 9, 75, 75)
 cv2.imshow('Bilateral Blurring', bilateral)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+
+if __name__ == "__main__" :
+    print(f"This is the main function")
+
+
