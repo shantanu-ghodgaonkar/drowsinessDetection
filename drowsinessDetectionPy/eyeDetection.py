@@ -1,12 +1,15 @@
 import cv2
+import numpy
 
 # Create a VideoCapture object for your webcam
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(0)
 
 # Check if the webcam is opened successfully
 if not cap.isOpened():
     print("Error opening webcam")
     exit()
+
+f = open("drowsinessDetectionPy/eyeMatrix.txt", "a")
 
 # Capture frames from the webcam
 while True:
@@ -26,22 +29,26 @@ while True:
     
     detected_faces = face_cascade.detectMultiScale(gray_frame)
     
-    for (column, row, width, height) in detected_faces:
-        cv2.rectangle(
-        frame,
-        (column, row),
-        (column + width, row + height),
-        (0, 255, 0),
-        2
-        )
-
-    # Display the grayscale frame
-    cv2.imshow('Face detection', frame)
-
+    if len(detected_faces) > 0 :
+    
+        for (xf, yf, wf, hf) in detected_faces:
+            # Crop the face region
+            gray_face_region = gray_frame[yf:yf+hf, xf:xf+wf]
+            eye_cascade = cv2.CascadeClassifier('drowsinessDetectionPy/haarcascades/haarcascade_eye.xml')
+            gray_detected_eyes = eye_cascade.detectMultiScale(gray_face_region)
+            if len(gray_detected_eyes) > 0 :
+                for (xe, ye, we, he) in gray_detected_eyes:
+                    numpy.savetxt(f, gray_face_region[ye:ye+he, xe:xe+we], fmt='%d')
+                    cv2.imshow('Cropped Eye', gray_face_region[ye:ye+he, xe:xe+we])
+            else :
+                print("BOTH EYES CLOSED")
+    else :
+        print("NO FACE DETECTED")
+    
     # Close the window with 'q' key
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-
+f.close()
 # Release the webcam and destroy all windows
 cap.release()
 cv2.destroyAllWindows()
