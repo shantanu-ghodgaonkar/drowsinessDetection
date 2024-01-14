@@ -41,10 +41,13 @@ while True:
                 for (xe, ye, we, he) in gray_detected_eyes:
                     numpy.savetxt(f1, gray_face_region[ye:ye+he, xe:xe+we], fmt='%d')
                     f1.write("\n\n\n")
-                    f2.write(f"{numpy.average(gray_face_region[ye:ye+he, xe:xe+we])}\n\n\n")
+                    frameAverage = numpy.average(gray_face_region[ye:ye+he, xe:xe+we])
+                    f2.write(f"{frameAverage}\n\n\n")
                     cv2.imshow('Cropped Eye', gray_face_region[ye:ye+he, xe:xe+we])
+                    if frameAverage > 70  :
+                        print("LEFT EYE CLOSED")
             else :
-                print("LEFT EYE CLOSED")
+                print("LEFT EYE NOT DETECTED")
     else :
         print("NO FACE DETECTED")
     
